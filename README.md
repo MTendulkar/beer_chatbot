@@ -7,8 +7,7 @@ I perform quantitative analysis for a living; creating a model from beer ratings
 
 1) Extract posts 
 2) Clean and process them
-3) Create a neural net 
-4) Train the neural net and yield a model
+3) Train a neural net and yield a model
 5) "Read" a thread on TalkBeer
 6) Extract a target post
 7) Use that post to "seed" a response from the chatbot
