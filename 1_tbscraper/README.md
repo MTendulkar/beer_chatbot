@@ -27,7 +27,7 @@ Clone the repo to your local machine.
 
 You must have a TalkBeer account. 
 
-In spiders/tbbot.py, change all 'tb.com' URLs to the correct site URL. Insert your credentials into lines 45 and 47. 
+In spiders/tbbot.py, change all 'tb.com' URLs to the correct site URL. Insert your credentials into lines 41 and 43. 
 
 ### How to run 
 
