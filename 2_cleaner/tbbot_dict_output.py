@@ -6,11 +6,12 @@ responseDictionary = dict()
 
 with open('data.csv', mode = 'r') as infile: 
     reader = csv.reader(infile)
+    next(reader, None) # skip header 
     for rows in reader: 
-        if (rows[1] == '' or rows[6] == ''):
+        if rows[5] == '': 
             continue
         else: 
-            responseDictionary[rows[6]] = rows[1]
+            responseDictionary[rows[6]] = rows[5]
 
 print 'Total len of dictionary', len(responseDictionary)
 
@@ -19,8 +20,6 @@ np.save('conversationDictionary.npy', responseDictionary)
 
 with open('conversationData.txt', 'w') as conversationFile: 
     for key,value in responseDictionary.iteritems():
-        if (not value.strip()):
-            # If there are empty strings
+        if (not value.strip()) or value.strip == '':
             continue
-        conversationFile.write(value.strip() + ' ')
-
+        conversationFile.write(value.strip() + '\n \n')

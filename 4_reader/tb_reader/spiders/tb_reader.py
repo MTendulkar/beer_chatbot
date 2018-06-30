@@ -21,6 +21,12 @@ def cleanMessage(message):
     # Deal with some weird tokens
     #cleanedMessage = cleanedMessage.replace("\xc2\xa0", "")
     cleanedMessage = re.sub("([a-z])*\xe2\x80\x99([a-z]*)", "'", cleanedMessage)
+    cleanedMessage = re.sub(ur"(\w*)(\xe2\x80\x99)(\w*)" , ur"\1'\3", cleanedMessage)
+    cleanedMessage = re.sub(ur"(\w*)(\u201c)(\w*)" , ur"\1''\3", cleanedMessage)
+    cleanedMessage = re.sub(ur"(\w*)(\u201d)(\w*)" , ur"\1''\3", cleanedMessage)
+    cleanedMessage = re.sub(ur"(\w*)(\u2019)(\w*)" , ur"\1'\3", cleanedMessage)
+    cleanedMessage = re.sub(ur"(\w*)(\xe2\x80\x93)(\w*)" , ur"\1-\3", cleanedMessage)
+    cleanedMessage = re.sub(ur"\u2022" , ur"", cleanedMessage)
     # Remove punctuation
     #cleanedMessage = re.sub('([.,!?])',' ', cleanedMessage)
     # Remove multiple spaces in message
