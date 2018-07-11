@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
+import codecs
 import time 
 import re
 
@@ -8,21 +9,16 @@ import re
 # scrape one page of results, for quick examination. 
 DEBUG = False
 
-# 
-def cleanMessage(message):
+def cleanMessage(cleanedMessage):
     # :param message: expects a string
     # :return cleanedMessage: a cleaned string
 
-    cleanedMessage = message.lower() 
     # Space out newlines 
     cleanedMessage = re.sub('\n', '\n ', cleanedMessage)
-    # Deal with some weird tokens
-    #cleanedMessage = cleanedMessage.replace("\xc2\xa0", "")
-    cleanedMessage = re.sub("([a-z])*\xe2\x80\x99([a-z]*)", "'", cleanedMessage)
-    # Remove punctuation
-    #cleanedMessage = re.sub('([.,!?])',' ', cleanedMessage)
-    # Remove multiple spaces in message
-    # cleanedMessage = re.sub('\s+',' ', cleanedMessage)
+    cleanedMessage = codecs.decode(cleanedMessage, 'utf-8')
+    cleanedMessage = re.sub('"', '\"', cleanedMessage)
+    cleanedMessage = re.sub("'", "\'", cleanedMessage)
+    cleanedMessage = cleanedMessage.strip() 
     return cleanedMessage
 
 
@@ -158,18 +154,21 @@ class TbbotSpider(scrapy.Spider):
                     print "Responding to: " + responding_to
 
                 # quoted text 
-                raw_quoted_text = response.css("blockquote.messageText.SelectQuoteContainer.ugc.baseHtml")[i].css("div.quote::text").extract()
-                raw_quoted_text = re.sub('"', "''", ' '.join(raw_quoted_text))
-                quoted_text = cleanMessage(raw_quoted_text)
+                raw_quoted_text = ' '.join(response.css(
+                    "blockquote.messageText.SelectQuoteContainer.ugc.baseHtml")[i].css("div.quote::text"
+                    ).extract())
+                clean_quoted_text = cleanMessage(raw_quoted_text)
 
  
                 if DEBUG:
                     print "Raw quoted text: " + raw_quoted_text
                     print "Clean quoted text: " + quoted_text
 
-                #raw_body
-                raw_body = ' '.join(response.css("li#" + post + ".message").css("div.messageInfo.primaryContent").css("div.messageContent").css("blockquote.messageText.SelectQuoteContainer.ugc.baseHtml::text").extract())
-
+                raw_body = ' '.join(response.css("li#" + post + ".message").css(
+                    "div.messageInfo.primaryContent").css("div.messageContent").css(
+                    "blockquote.messageText.SelectQuoteContainer.ugc.baseHtml::text").extract())
+                clean_body = cleanMessage(raw_body)
+                
                 if DEBUG: 
                     print "Raw body: " + raw_body
 
@@ -186,13 +185,14 @@ class TbbotSpider(scrapy.Spider):
 
                 scraped_info = {
                     'username' : username,
+                    #'time' : time,
                     'thread' : thread,
                     'forum' : forum,
                     'responding_to' : responding_to,
-                    'quoted_text' : quoted_text, 
-                    'raw_quoted_text' : raw_quoted_text,
-                    'body' : body, 
-                    'raw_body': raw_body, 
+                    'clean_quoted_text' : clean_quoted_text, 
+                    #'raw_quoted_text' : raw_quoted_text,
+                    'clean_body' : clean_body, 
+                    #'raw_body': raw_body, 
                     'post_url' : response.url 
                 }
 
