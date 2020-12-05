@@ -10,9 +10,9 @@ I perform quantitative analysis for a living; creating a model from beer ratings
 3) Train a neural net and yield a model
 5) "Read" a thread on TalkBeer
 6) Choose a post from that thread to "respond" to
-7) Use that post to "seed" a response from the chatbot
+7) Use that post as a prompt to seed a response from the chatbot
 8) Generate the response, clean it
-9) Post the response back to TalkBeer, quoting the "seed" post
+9) Post the response back to TalkBeer, quoting the seed post
 
 The end result would look as if the chatbot were actively reading the thread and responding to it. 
 
